@@ -8,7 +8,7 @@ class fixed_size_bufferTests: XCTestCase {
         let i : Int = 350
         
         let b = FixedSizeBuffer(16)
-        let w = FixedSizeBufferWriter(b)
+        let w = b.writer()
         do {
             XCTAssertEqual(w.offset, 0)
             try w.write(i16)
@@ -22,7 +22,7 @@ class fixed_size_bufferTests: XCTestCase {
         }
         XCTAssertThrowsError(try w.write(i), "overflow")
         
-        let r = FixedSizeBufferReader(b)
+        let r = b.reader()
         do {
             let got_i16 : Int16 = try r.read()
             let got_u8 : UInt8 = try r.read()

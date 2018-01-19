@@ -15,6 +15,14 @@ public class FixedSizeBuffer {
         self.length = length
         self.data = Data(repeating: 0, count: length)
     }
+    
+    public func reader() -> FixedSizeBufferReader {
+        return FixedSizeBufferReader(self)
+    }
+    
+    public func writer() -> FixedSizeBufferWriter {
+        return FixedSizeBufferWriter(self)
+    }
 }
 
 public class FixedSizeBufferCursor {
