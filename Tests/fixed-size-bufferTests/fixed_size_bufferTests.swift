@@ -10,19 +10,13 @@ class fixed_size_bufferTests: XCTestCase {
         let b = FixedSizeBuffer(16)
         let w = FixedSizeBufferWriter(b)
         do {
-//            print("\(w.buffer.data)")
             XCTAssertEqual(w.offset, 0)
             try w.write(i16)
-//            print("\(w.buffer.data)")
             XCTAssertEqual(w.offset, 2)
             try w.write(u8)
-//            print("\(w.buffer.data)")
             XCTAssertEqual(w.offset, 3)
             try w.write("test")
-//            print("\(w.buffer.data)")
             XCTAssertEqual(w.offset, 15)
-//            try w.write(i)
-//            XCTAssertEqual(w.offset, 0)
         } catch let e {
             XCTFail("\(e)")
         }
@@ -30,24 +24,37 @@ class fixed_size_bufferTests: XCTestCase {
         
         let r = FixedSizeBufferReader(b)
         do {
-            print("read offset \(r.offset)")
             let got_i16 : Int16 = try r.read()
-            print("read offset \(r.offset)")
             let got_u8 : UInt8 = try r.read()
-            print("read offset \(r.offset)")
             let got_s : String = try r.read()
-            print("read offset \(r.offset)")
             XCTAssertEqual(got_i16, i16)
             XCTAssertEqual(got_u8, u8)
             XCTAssertEqual(got_s, "test")
         } catch let e {
             XCTFail("\(e)")
         }
-        
+
         var tmp : UInt64 = 999
         XCTAssertThrowsError(try tmp = r.read(), "overflow")
         XCTAssertEqual(tmp, 999)
-        
+
+        do {
+            r.reset() // try reading the bytes as different datatypes
+            let got_u8 : UInt8 = try r.read()
+            let got_i16 : Int16 = try r.read()
+            let got_u64 : UInt64 = try r.read()
+            let got_u8_2 : UInt8 = try r.read()
+
+            XCTAssertEqual(got_u8, 3) // high byte of short 787
+            XCTAssertEqual(got_i16, 4866) // ((low byte of short 787) << 8) + 2
+            XCTAssertEqual(got_u64, 4) // length of string
+            XCTAssertEqual(got_u8_2, 116) // 't'
+            
+            XCTAssertEqual(r.remaining, 4)
+        } catch let e {
+            XCTFail("\(e)")
+        }
+
         XCTAssertEqual(b.length, 16)
     }
 
