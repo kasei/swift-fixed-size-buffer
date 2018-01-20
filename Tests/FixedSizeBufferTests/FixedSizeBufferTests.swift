@@ -1,5 +1,5 @@
 import XCTest
-@testable import fixed_size_buffer
+@testable import FixedSizeBuffer
 
 class fixed_size_bufferTests: XCTestCase {
     func testBuffer() {
