@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "fixed-size-buffer",
+    name: "FixedSizeBuffer",
     products: [
         .library(
             name: "fixed-size-buffer",
