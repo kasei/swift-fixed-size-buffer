@@ -48,7 +48,7 @@ class fixed_size_bufferTests: XCTestCase {
             XCTAssertEqual(got_u8, 3) // high byte of short 787
             XCTAssertEqual(got_i16, 4866) // ((low byte of short 787) << 8) + 2
             XCTAssertEqual(got_u64, 4) // length of string
-            XCTAssertEqual(got_u8_2, 116) // 't'
+            XCTAssertEqual(got_u8_2, 116) // 't' ascii
             
             XCTAssertEqual(r.remaining, 4)
         } catch let e {
@@ -58,6 +58,17 @@ class fixed_size_bufferTests: XCTestCase {
         XCTAssertEqual(b.length, 16)
     }
 
+    func testBufferWriteOverflow() {
+        let size = 1024
+        let b = FixedSizeBuffer(size)
+        let w = b.writer()
+        for i in 0..<size {
+            let u8 = UInt8(i % 256)
+            XCTAssertNoThrow(try w.write(u8))
+        }
+        XCTAssertThrowsError(try w.write(UInt8(1)))
+    }
+    
     static var allTests = [
         ("testBuffer", testBuffer),
     ]
