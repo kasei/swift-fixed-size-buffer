@@ -7,16 +7,16 @@ let package = Package(
     name: "FixedSizeBuffer",
     products: [
         .library(
-            name: "fixed-size-buffer",
-            targets: ["fixed-size-buffer"]),
+            name: "FixedSizeBuffer",
+            targets: ["FixedSizeBuffer"]),
     ],
     dependencies: [],
     targets: [
         .target(
-            name: "fixed-size-buffer",
+            name: "FixedSizeBuffer",
             dependencies: []),
         .testTarget(
-            name: "fixed-size-bufferTests",
-            dependencies: ["fixed-size-buffer"]),
+            name: "FixedSizeBufferTests",
+            dependencies: ["FixedSizeBuffer"]),
     ]
 )
